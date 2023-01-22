@@ -1,0 +1,40 @@
+<!-- articles MODAL -->
+<div aria-hidden="true" aria-labelledby="exampleModalCenterTitle"   class="modal fade" id="modalArticle" role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <h2 id="modaltitle">Article Detail</h2>
+      </div>
+      <div class="modal-body">
+        <!--begin form-->
+        <form  method="POST"  class="form" id="form">
+          <div class="col-12 bg-red text-white h2 p-2 rounded-3 d-none " id="checkEmpty">
+            please remplire tous les champs
+          </div>
+          <div class="form-group">
+            <label for="fArticleTitle" class="form-label h5">Title</label>
+            <input class="form-control form-control-lg check" id="fArticleTitle" name="fArticleTitle" required type="text">
+          </div>
+          <div class="form-group">
+            <label for="fIsbn" class="form-label h5">Description</label>
+            <textarea class="form-control form-control-lg" id="fIsbn" name="fIsbn" rows="3"></textarea>
+           </div>
+          <div class="form-group">
+            <label for="fimg" class="form-label h5">Image (jpg ou png)</label>
+            <input class="form-control form-control-lg check" id="fimg" name="fimg" required type="file">
+          </div>
+
+
+          <div class="modal-footer" id="modelFooter">
+
+          </div>
+        </form>
+        <!--end form-->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TASK MODAL DELETE AND UPDATE-->
