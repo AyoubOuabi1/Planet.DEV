@@ -8,6 +8,7 @@
     box-sizing: border-box;
     font-size: 16px;
 }
+
 body{
     background-color: var(--main-bg-color);
 }
@@ -79,6 +80,37 @@ body{
     height: 3em;
     width: 3em;
     color: black;
+}
+/*start login page*/
+
+#loginBody{
+    background-color: #858585;
+    padding-top: 150px;
+    background-size: cover;
+    align-items: center;
+    justify-content: center;
+}
+#userImageLogin{
+    size: 50px;
+    font-size: 50px;
+    z-index: 2;
+    height: 5em;
+    width: 5em;
+    margin-bottom: -40px;
+    color: black;
+}
+.formContainer{
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.48);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.ButtonDesign{
+    border-radius: 30px;
+    color: white;
+
 }
 @media (min-width: 1024px) {
     #sidebar-wrapper {
