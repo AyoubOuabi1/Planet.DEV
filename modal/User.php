@@ -26,13 +26,23 @@ class User
         }
     }
 
-    public function getAllArticles():array{
+    public static function getAllArticles():array{
         $con=DbConnection::getConnection();
-        $qry=$con->prepare("SELECT * FROM articles");
+        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id");
         $qry->execute();
         return $qry->fetchAll();
 
     }
+
+    public static function getAllArticlesBySearch($title,$category):array{
+        $con=DbConnection::getConnection();
+        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id where articles.title like '%$title%' ou categoryName like '%$category%'");
+        $qry->execute();
+        return $qry->fetchAll();
+
+    }
+
+
     public static function updateArticle(Article $article) : bool{
         $con=DbConnection::getConnection();
         $qry=$con->prepare("update articles SET title='$article->title',description='$article->description',image='$article->image',cat_id='$article->cat_id' where id=$article->id");
