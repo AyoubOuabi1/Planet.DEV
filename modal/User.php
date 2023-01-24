@@ -33,7 +33,6 @@ class User
         return $qry->fetchAll();
 
     }
-
     public static function getAllArticlesBySearch($title,$category):array{
         $con=DbConnection::getConnection();
         $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id where articles.title like '%$title%' ou categoryName like '%$category%'");
@@ -42,8 +41,7 @@ class User
 
     }
 
-
-    public static function updateArticle(Article $article) : bool{
+     public static function updateArticle(Article $article) : bool{
         $con=DbConnection::getConnection();
         $qry=$con->prepare("update articles SET title='$article->title',description='$article->description',image='$article->image',cat_id='$article->cat_id' where id=$article->id");
         $qry->execute();
@@ -64,10 +62,6 @@ class User
             return false;
         }
     }
-
-
-
-
 
 
 }
