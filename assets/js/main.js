@@ -147,11 +147,28 @@ function loadData(data){
                     <td>${data[i].date}</td>
                     <td>${data[i].username}</td>
                     <td>
-                         <button type="button" onclick="" class="mt-2 btn btn-primary">Open</button>
-                         <button type="button" onclick="" class="mt-2 btn btn-danger">delete</button>
+                         <button type="button" onclick="loadModalData(${data},${data[i].id})" class="mt-2 btn btn-primary" >Open</button>
+                         <button type="button" onclick="showData()" class="mt-2 btn btn-danger">delete</button>
                     </td>
               </tr>
         `;
     }
+
+}
+
+
+function loadModalData(data,id){
+    $('#modalArticleData').modal('show');
+    for(let i=0;i<data.length;i++){
+        if(i+1==id){
+            $("#fArticleTitleModal").val(data[i].title);
+            $("#arctImg").attr("src", "../assets/images/"+data[i].image);
+            document.getElementById("fArticleCatData").value = data[i].categoryName;
+            $("#arctDate").val(data[i].date);
+            $("#arctUser").val(data[i].username);
+            $("#fArticleDescrModal").val(data[i].description);
+        }
+    }
+
 
 }
