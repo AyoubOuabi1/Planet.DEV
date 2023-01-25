@@ -16,6 +16,7 @@ function loadArticle(){
     window.location.href="http://localhost/PlanetDEV/View/articles.php"
 
 }
+
 function checkLogin(){
     if(!($("#inputEmail").val()=='')  && !($("#inputPassword").val()=='')){
         $.post("http://localhost/PlanetDEV/Controller/CheckLogin.php", {email:$("#inputEmail").val(),password:$("#inputPassword").val()},
@@ -41,46 +42,21 @@ function checkLogin(){
 
 function addNewForm(){
     formCounter++;
-    document.getElementById('FormsBody').innerHTML+=`<form id="form${formCounter}">
+    let newform = document.getElementById('form1').cloneNode(true);
+    newform.getElementsByClassName('ttl')[0].innerHTML ='Article'+formCounter
+    document.getElementById('FormsBody').appendChild(newform);
 
-            <div class="FormContainer" id="div${formCounter}">
-              <h1 class="h1 mt-4">Article ${formCounter}</h1>
-
-              <div class="form-group">
-                <label for="fArticleTitle" class="form-label h5">Title</label>
-                <input class="form-control form-control-lg check"  name="fArticleTitle" required type="text">
-              </div>
-              <div class="form-group">
-                <label for="fArticleCat" class="form-label h5"></label>
-
-                <select class="form-select"  name="fArticleCat" aria-label="Default select example">
-                  <option selected>Select Category</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select>
-              </div>
-              <div class="form-group ">
-                <label for="fArticleDescr" class="form-label h5">Description</label>
-                <textarea class="form-control form-control-lg" name="fArticleDescr" rows="3"></textarea>
-              </div>
-              <div class="form-group">
-                <label for="file" class="form-label h5">Image (jpg ou png jpge)</label>
-                <input class="form-control form-control-lg check"  name="file" required type="file">
-              </div>
-            </div>
-            </form> `;
 }
 
 function insertIntoDb(){
     let formData = new FormData();
     for(let i=0; i<formCounter;i++){
         if(checkImage(document.getElementsByName('file')[i].files[0])){
-                formData.append("functionName", "insertInto");
+                formData.append("functionName", "insertArticle");
                 formData.append("file", document.getElementsByName('file')[i].files[0]);
                 formData.append("title", document.getElementsByName('fArticleTitle')[i].value);
                 formData.append("description", document.getElementsByName('fArticleDescr')[i].value);
-                formData.append("cat_id", document.getElementsByName('fArticleCat')[i].value);
+                formData.append("cat_id", document.getElementsByName('fArticleCatData')[i].value);
                 $.ajax({
                     url:'http://localhost/PlanetDEV/Controller/user.inc.php',
                     type: "POST",
@@ -90,8 +66,7 @@ function insertIntoDb(){
                     processData: false,
                     success:function(data)
                     {
-                        alert(data);
-                        console.log(data)
+                        showData();
 
                     },fail:function (data){
                         alert(data)
@@ -113,18 +88,17 @@ function clearFormData(formData) {
         formData.delete(arr[i]);
     }
 
-
-
 }
 
 function  checkImage(img){
     let name = img.name;
     let ext = name.split('.').pop().toLowerCase();
     console.log(ext+"          "+name);
-    return $.inArray(ext, ['png', 'jpg', 'jpeg']) != -1;
+    return $.inArray(ext, ['png', 'jpg', 'jpeg','jfif']) != -1;
 }
 showData();
 function  showData(){
+    document.getElementById("loadArticles").innerHTML="";
     $.ajax({
         url:'http://localhost/PlanetDEV/Controller/user.inc.php',
         type: "POST",
@@ -139,16 +113,20 @@ function  showData(){
 }
 
 function loadData(data){
+
     for (let i=0; i<data.length; i++) {
+        let arr = data[i];
+        console.log(arr);
         document.getElementById("loadArticles").innerHTML+=`
              <tr>
                     <td><img src="../assets/images/${data[i].image}" alt="article img" height="25px" width="45px"/></td>
                     <td>${data[i].title}</td>
                     <td>${data[i].date}</td>
                     <td>${data[i].username}</td>
+                       <td>${data[i].categoryName}</td>
                     <td>
-                         <button type="button" onclick="loadModalData(${data},${data[i].id})" class="mt-2 btn btn-primary" >Open</button>
-                         <button type="button" onclick="showData()" class="mt-2 btn btn-danger">delete</button>
+                         <button type="button" onclick="loadModalData(${data[i].id})" class="mt-2 btn btn-primary" >Open</button>
+                         <button type="button" onclick="deleteArticle(${data[i].id})" class="mt-2 btn btn-danger">delete</button>
                     </td>
               </tr>
         `;
@@ -157,18 +135,98 @@ function loadData(data){
 }
 
 
-function loadModalData(data,id){
+function loadModalData(slectedId){
+    console.log(slectedId)
     $('#modalArticleData').modal('show');
-    for(let i=0;i<data.length;i++){
-        if(i+1==id){
-            $("#fArticleTitleModal").val(data[i].title);
-            $("#arctImg").attr("src", "../assets/images/"+data[i].image);
-            document.getElementById("fArticleCatData").value = data[i].categoryName;
-            $("#arctDate").val(data[i].date);
-            $("#arctUser").val(data[i].username);
-            $("#fArticleDescrModal").val(data[i].description);
+
+    $.ajax({
+        url:'http://localhost/PlanetDEV/Controller/user.inc.php',
+        type: "POST",
+        data : {functionName:"getArticle",funcId:1},
+        dataType:"json",
+        success: function (data){
+            for(var i=0; i<data.length;i++){
+                if(data[i].id==slectedId){
+                    $("#fArticleTitleModal").val(data[i].title);
+                    $("#arctImg").attr("src", "../assets/images/"+data[i].image);
+                    $("#fArticleCatData").val(data[i].catId);
+                    $('#arctDate').val(data[i].date);
+                    $("#arctUser").val(data[i].username);
+                    $("#fArticleDescrModal").val(data[i].description);
+                    $("#modelFooterData").html(`
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >cancel</button>
+                        <button type="button" id="addArtcBtn" class="btn  btn-primary text-white"   onclick="updateArticale(${data[i].id})" >Save Changes</button>
+                    `)
+                }
+            }
+        },fail: function (data){
+            console.log(data);
         }
+    })
+}
+function getArticleBySearch(){
+     document.getElementById("loadArticles").innerHTML="";
+    $.ajax({
+        url:'http://localhost/PlanetDEV/Controller/user.inc.php',
+        type: "POST",
+        data : {functionName:"getArticle",funcId:2,inpt:$("#searchInput").val()},
+        dataType:"json",
+        success: function (data){
+
+            loadData(data);
+        },fail: function (data){
+            console.log(data);
+
+        }
+    })
+}
+function deleteArticle(selectedId){
+    console.log(selectedId);
+    $.ajax({
+        url:'http://localhost/PlanetDEV/Controller/user.inc.php',
+        type: "POST",
+        data : {functionName:"deleteArticle",id:selectedId},
+        dataType:"json",
+        success: function (data){
+             showData();
+        },fail: function (data){
+            console.log(data);
+        }
+    })
+}
+
+
+function updateArticale(id){
+    let formData = new FormData();
+
+    if(checkImage(document.getElementById('Datafile').files[0])){
+        formData.append("functionName", "updateArticle");
+        formData.append("file", document.getElementById('Datafile').files[0]);
+        formData.append("id", id);
+        formData.append("title", document.getElementById('fArticleTitleModal').value);
+        formData.append("description", document.getElementById('fArticleDescrModal').value);
+        formData.append("cat_id", document.getElementById('fArticleCatData').value);
+        $.ajax({
+            url:'http://localhost/PlanetDEV/Controller/user.inc.php',
+            type: "POST",
+            data : formData,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success:function(data)
+            {
+                showData();
+
+            },fail:function (data){
+                alert(data)
+            }
+        });
+        clearFormData(formData);
+
+    }else{
+        alert("invalid format");
     }
 
 
 }
+

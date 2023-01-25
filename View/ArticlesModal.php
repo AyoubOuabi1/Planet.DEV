@@ -15,7 +15,7 @@
             </div>
             <form id="form1" >
               <div class="FormContainer" id="div1">
-                <h1 class="h1">Article 1</h1>
+                <h1 class="h1 ttl" >Article 1</h1>
                 <div class="form-group">
                   <label for="fArticleTitle" class="form-label h5">Title</label>
                   <input class="form-control form-control-lg check" id="fArticleTitle" name="fArticleTitle" required type="text">
@@ -25,9 +25,12 @@
 
                   <select class="form-select" id="fArticleCat" name="fArticleCat" aria-label="Default select example">
                     <option selected>Select Category</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                      <?php  foreach(User::getCategories() as $category){
+                          $id=$category["id"];
+                          $name=$category["catName"];
+                          echo "<option value='$id'>$name</option>";
+
+                      } ?>
                   </select>
                 </div>
                 <div class="form-group ">

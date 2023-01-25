@@ -1,4 +1,4 @@
-<!-- articles MODAL -->
+<!-- articles Detail MODAL -->
 <div aria-hidden="true" aria-labelledby="exampleModalCenterTitle"   class="modal fade" id="modalArticleData" role="dialog"
      tabindex="-1">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -21,19 +21,30 @@
                   <input class="form-control form-control-lg check" id="fArticleTitleModal" name="fArticleTitleModal" type="text">
                 </div>
                 <div class="form-group">
-                  <label for="arctImg" class="form-label h5"></label>
-                  <img alt="article image" width="240px" height="240px" id="arctImg">
+                  <label for="arctImg" class="form-label h5">Article Image</label>
+                  <img alt="article image" width="240px" height="240px" class="form-control form-control-lg" id="arctImg" name="arctImg">
+
                 </div>
+                  <div class="form-group">
+                      <label for="Datafile" class="form-label h5">update Image (jpg ou png)</label>
+                      <input class="form-control form-control-lg check" id="Datafile" name="Datafile" required type="file">
+                  </div>
                 <div class="form-group">
                   <label for="fArticleCatData" class="form-label h5">Category</label>
+
                   <select class="form-select" id="fArticleCatData" name="fArticleCatData" aria-label="Default select example">
                     <option selected>Select Category</option>
+                    <?php  foreach(User::getCategories() as $category){
+                        $id=$category["id"];
+                        $name=$category["catName"];
+                        echo "<option value='$id'>$name</option>";
 
+                    } ?>
                   </select>
                 </div>
                 <div class="form-group">
                   <label for="arctDate" class="form-label h5">Added in</label>
-                  <input class="form-control form-control-lg check" id="arctDate" name="arctDate" type="date" readonly>
+                  <input class="form-control form-control-lg check" id="arctDate" name="arctDate" type="text" readonly>
                 </div>
                 <div class="form-group">
                   <label for="arctUser" class="form-label h5">Added By</label>
@@ -48,9 +59,8 @@
             </form>
 
           </div>
-          <div class="modal-footer" id="modelFooter">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >cancel</button>
-            <button type="button" id="addArtcBtn" class="btn  btn-primary text-white"   onclick="insertIntoDb()()" >Save Changes</button>
+          <div class="modal-footer" id="modelFooterData">
+
           </div>
 
         <!--end form-->

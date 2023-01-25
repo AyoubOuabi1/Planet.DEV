@@ -1,3 +1,8 @@
+<?php
+spl_autoload_register(function($className) {
+    $file = '../modal/'.$className.'.php';
+    require $file;
+}); ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'head.html'?>
@@ -23,14 +28,24 @@
                 <div class="mb-3 d-flex justify-content-end">
 
                     <button class="btn  btn-primary rounded-pill" type="button" data-bs-toggle="modal" onclick="openModl()">
-                        <h5 >&emsp;Add Articles&emsp;</h5>
+                        <h5>&emsp;Add Articles&emsp;</h5>
                     </button>
 
                 </div>
                  <div class="row my-5">
+                     <div class="row">
+                         <div class="col-sm-12 col-md-4">
+                             <h3 class="fs-4 mb-3 primary-text-color">La list des articels</h3>
 
-                     <div class="col-12 table-responsive">
-                         <h3 class="fs-4 mb-3 primary-text-color">La list des articels</h3>
+                         </div>
+                         <div class="col-sm-12 col-md-8">
+                             <input type="text" class="form-control" id="searchInput" onkeyup="getArticleBySearch()"  placeholder="Search by title or category">
+
+
+                         </div>
+                     </div>
+                     <div class="col-12 mt-3 table-responsive">
+
 
                          <table class="table  bg-white rounded shadow-sm  table-hover">
                              <thead>
@@ -39,6 +54,7 @@
                                  <th scope="col">title</th>
                                  <th scope="col">added in</th>
                                  <th scope="col">added by</th>
+                                 <th scope="col">Category</th>
                                  <th scope="col"></th>
                              </tr>
                              </thead>
@@ -54,8 +70,8 @@
         </div>
     </div>
 </div>
-<?php include 'ArticlesModal.html' ?>
-<?php include 'DataModal.html' ?>
+<?php include 'ArticlesModal.php' ?>
+<?php include 'DataModal.php' ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

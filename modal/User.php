@@ -28,14 +28,14 @@ class User
 
     public static function getAllArticles():array{
         $con=DbConnection::getConnection();
-        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id");
+        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName,categories.id as catId FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id");
         $qry->execute();
         return $qry->fetchAll();
 
     }
-    public static function getAllArticlesBySearch($title,$category):array{
+    public static function getAllArticlesBySearch($inpt):array{
         $con=DbConnection::getConnection();
-        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id where articles.title like '%$title%' ou categoryName like '%$category%'");
+        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName,categories.id as catId FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id where articles.titre like '%$inpt%' or categories.CatName like '%$inpt%'");
         $qry->execute();
         return $qry->fetchAll();
 
@@ -43,7 +43,7 @@ class User
 
      public static function updateArticle(Article $article) : bool{
         $con=DbConnection::getConnection();
-        $qry=$con->prepare("update articles SET title='$article->title',description='$article->description',image='$article->image',cat_id='$article->cat_id' where id=$article->id");
+        $qry=$con->prepare("update articles SET titre='$article->title',description='$article->description',cat_id='$article->cat_id' where id=$article->id");
         $qry->execute();
         if($qry->rowCount()){
             return true;
@@ -54,7 +54,7 @@ class User
 
     public static function deleteArticle($id):bool{
         $con=DbConnection::getConnection();
-        $qry=$con->prepare("delete from articles where id=id");
+        $qry=$con->prepare("delete from articles where id=$id");
         $qry->execute();
         if($qry->rowCount()){
             return true;
@@ -63,5 +63,20 @@ class User
         }
     }
 
+
+    public static function getCategories():array{
+        $con=DbConnection::getConnection();
+        $qry=$con->prepare("SELECT  * FROM categories");
+        $qry->execute();
+        return $qry->fetchAll();
+
+    }
+
+    public static function getImageName($id):string{
+        $con=DbConnection::getConnection();
+        $qry=$con->prepare("SELECT image from articles where id=$id");
+        $qry->execute();
+        return $qry->fetch()[0];
+    }
 
 }
