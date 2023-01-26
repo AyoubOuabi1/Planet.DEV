@@ -7,7 +7,7 @@ class User
         $qry->execute();
         session_start();
         if($qry->rowCount()>0){
-            $_SESSION['user']=$qry->fetch();
+            $_SESSION['adminId']=$qry->fetch()[0];
             return true;
         }else{
             return false;
@@ -28,7 +28,15 @@ class User
 
     public static function getAllArticles():array{
         $con=DbConnection::getConnection();
-        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName,categories.id as catId FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id");
+        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName,categories.id as catId FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id order by articles.id desc");
+        $qry->execute();
+        return $qry->fetchAll();
+
+    }
+
+    public static function getLastFourAllArticles():array{
+        $con=DbConnection::getConnection();
+        $qry=$con->prepare("SELECT articles.id,titre,description,date,image, CONCAT(firstName,' ',lastName) as username,CatName as categoryName,categories.id as catId FROM articles inner join users on articles.user_id=users.id inner join categories on articles.cat_id=categories.id order by articles.id desc limit 4");
         $qry->execute();
         return $qry->fetchAll();
 
@@ -71,12 +79,30 @@ class User
         return $qry->fetchAll();
 
     }
+    public static function getTotalCategories():String{
+        $con=DbConnection::getConnection();
+        $qry=$con->prepare("SELECT count(*) FROM categories");
+        $qry->execute();
+        return $qry->fetch()[0];
 
+    }
     public static function getImageName($id):string{
         $con=DbConnection::getConnection();
         $qry=$con->prepare("SELECT image from articles where id=$id");
         $qry->execute();
         return $qry->fetch()[0];
     }
+    public static function getTotalArticles( ):string{
+        $con=DbConnection::getConnection();
+        $qry=$con->prepare("SELECT count(*) from articles");
+        $qry->execute();
+        return $qry->fetch()[0];
+    }
 
+    public static function getTotalUsers( ):string{
+        $con=DbConnection::getConnection();
+        $qry=$con->prepare("SELECT count(*) from users");
+        $qry->execute();
+        return $qry->fetch()[0];
+    }
 }

@@ -10,9 +10,6 @@
         <!--begin form-->
 
           <div id="FormsBody">
-            <div class="col-12 bg-red text-white h2 p-2 rounded-3 d-none " id="checkEmpty">
-              please remplire tous les champs
-            </div>
             <form id="form1" >
               <div class="FormContainer" id="div1">
                 <h1 class="h1 ttl" >Article 1</h1>
@@ -24,7 +21,7 @@
                   <label for="fArticleCat" class="form-label h5"></label>
 
                   <select class="form-select" id="fArticleCat" name="fArticleCat" aria-label="Default select example">
-                    <option selected>Select Category</option>
+                    <option selected disabled>Select Category</option>
                       <?php  foreach(User::getCategories() as $category){
                           $id=$category["id"];
                           $name=$category["catName"];
@@ -52,7 +49,7 @@
           <div class="modal-footer" id="modelFooter">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >cancel</button>
             <button type="button" id="addNewFormBtn" class="btn  btn-primary text-white" onclick="addNewForm()" >Add new Form</button>
-            <button type="button" id="addArtcBtn" class="btn  btn-primary text-white"   onclick="insertIntoDb()()" >Save</button>
+            <button type="button" id="addArtcBtn" class="btn  btn-primary text-white"  data-bs-dismiss="modal"  onclick="checkValidation()" >Save</button>
           </div>
 
         <!--end form-->

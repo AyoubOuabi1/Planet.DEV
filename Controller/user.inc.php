@@ -23,7 +23,7 @@ function insertIntoArticle(): void
 {
     $title=$_POST['title'];
     $description=$_POST['description'];
-   // $userId=$_SESSION['user']['id'];
+    $userId=$_SESSION['adminId'];
     $cat_id=$_POST['cat_id'];
     if($_FILES["file"]["name"] != '')
     {
@@ -32,7 +32,7 @@ function insertIntoArticle(): void
         $name = uniqid().'.'.$ext;
         $location = '../assets/images/' . $name;
         move_uploaded_file($_FILES["file"]["tmp_name"], $location);
-        if(User::insertArticle(new Article(null,$title,$description,null,$name,1,$cat_id))){
+        if(User::insertArticle(new Article(null,$title,$description,null,$name,$userId,$cat_id))){
             echo 'true';
         }else{
             echo 'false';

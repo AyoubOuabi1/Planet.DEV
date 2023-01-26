@@ -33,7 +33,7 @@
                   <label for="fArticleCatData" class="form-label h5">Category</label>
 
                   <select class="form-select" id="fArticleCatData" name="fArticleCatData" aria-label="Default select example">
-                    <option selected>Select Category</option>
+                    <option selected disabled>Select Category</option>
                     <?php  foreach(User::getCategories() as $category){
                         $id=$category["id"];
                         $name=$category["catName"];
