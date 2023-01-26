@@ -79,7 +79,7 @@ class User
         return $qry->fetchAll();
 
     }
-    public static function getTotalCategories():String{
+    public static function getTotalCategories(){
         $con=DbConnection::getConnection();
         $qry=$con->prepare("SELECT count(*) FROM categories");
         $qry->execute();
@@ -92,14 +92,14 @@ class User
         $qry->execute();
         return $qry->fetch()[0];
     }
-    public static function getTotalArticles( ):string{
+    public static function getTotalArticles( ) {
         $con=DbConnection::getConnection();
         $qry=$con->prepare("SELECT count(*) from articles");
         $qry->execute();
         return $qry->fetch()[0];
     }
 
-    public static function getTotalUsers( ):string{
+    public static function getTotalUsers( ) {
         $con=DbConnection::getConnection();
         $qry=$con->prepare("SELECT count(*) from users");
         $qry->execute();
